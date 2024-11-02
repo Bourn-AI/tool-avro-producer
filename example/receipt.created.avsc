@@ -1,0 +1,30 @@
+{
+  "type": "record",
+  "name": "ReceiptCreated",
+  "namespace": "ai.bourn",
+  "fields": [
+    {
+      "name": "receiptId",
+      "type": "string"
+    },
+    {
+      "name": "reference",
+      "type": [
+        "null",
+        "string"
+      ], "default": null
+    },
+    {
+      "name": "amount",
+      "type": "string"
+    },
+    {
+      "name": "customerId",
+      "type": "string"
+    },
+    {
+      "name": "vendorId",
+      "type": "string"
+    }
+  ]
+}

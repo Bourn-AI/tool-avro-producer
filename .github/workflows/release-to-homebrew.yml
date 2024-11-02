@@ -1,0 +1,67 @@
+name: Release to Homebrew
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers only on version tags
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16' # specify your required Node.js version
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build project
+      run: npm run build # adjust to your project's build command
+
+    - name: Run tests
+      run: npm test
+
+    - name: Create GitHub release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        draft: false
+        prerelease: false
+
+    - name: Upload assets to release
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: path/to/your/build.tar.gz # path to the build artifact
+        asset_name: yourapp-v${{ github.ref_name }}.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Update Homebrew Formula
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Clone your Homebrew tap repository
+        git clone https://github.com/yourusername/homebrew-yourtap.git
+        cd homebrew-yourtap
+
+        # Update the formula file with the new version and SHA256 hash
+        sed -i '' "s|url \".*\"|url \"https://github.com/yourusername/yourapp/releases/download/${{ github.ref_name }}/yourapp-v${{ github.ref_name }}.tar.gz\"|" yourapp.rb
+        NEW_HASH=$(curl -L https://github.com/yourusername/yourapp/releases/download/${{ github.ref_name }}/yourapp-v${{ github.ref_name }}.tar.gz | sha256sum | cut -d ' ' -f 1)
+        sed -i '' "s|sha256 \".*\"|sha256 \"$NEW_HASH\"|" yourapp.rb
+
+        # Commit and push changes
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add yourapp.rb
+        git commit -m "Update formula to version ${{ github.ref_name }}"
+        git push origin main

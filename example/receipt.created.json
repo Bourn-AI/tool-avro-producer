@@ -1,0 +1,7 @@
+{
+    "receiptId": "client_id",
+    "amount": "amount",
+    "vendorId": "vendor_id",
+    "customerId": "customer_id",
+    "reference": "reference"
+}
