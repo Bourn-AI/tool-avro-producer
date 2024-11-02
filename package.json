@@ -9,7 +9,7 @@
     "package": "pkg ."
   },
   "author": "paul-bournai",
-  "license": "ISC",
+  "license": "AGPL-3.0-only",
   "description": "",
   "dependencies": {
     "avsc": "^5.7.7",
