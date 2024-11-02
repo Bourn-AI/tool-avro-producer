@@ -4,3 +4,4 @@ dist
 out
 tmp
 release
+release*.zip
