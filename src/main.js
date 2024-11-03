@@ -53,7 +53,7 @@ const publish = async (jsonFilePath, schemaFilePath, topic, brokers, schemaRegis
   let avroMessage;
   if (schemaRegistry) {
     const reg = new SchemaRegistry({ host: schemaRegistry });
-    const registryId = await reg.getRegistryId("receipt.created-value", "latest");
+    const registryId = await reg.getRegistryId(`${topic}-value`, "latest");
     avroMessage = await reg.encode(registryId, await jsonData);
   }
   else {
