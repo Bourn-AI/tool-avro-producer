@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "pkg ."
+    "package": "pkg . && zip releases/release-$npm_package_version.zip release/avro-*"
   },
   "author": "paul-bournai",
   "license": "AGPL-3.0-only",
