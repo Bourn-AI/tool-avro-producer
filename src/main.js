@@ -4,6 +4,7 @@ const path = require('path');
 const avro = require('avsc');
 const { Kafka } = require('kafkajs');
 const vorpal = require('vorpal')();
+const { SchemaRegistry } = require('@kafkajs/confluent-schema-registry');
 
 console.log(`
 
@@ -44,30 +45,41 @@ const publishToKafka = async (topic, message, brokers) => {
   await producer.disconnect();
 };
 
-// Main function to read, serialize, and publish
-const main = async () => {
-};
+const publish = async (jsonFilePath, schemaFilePath, topic, brokers, schemaRegistry) => {
+  const jsonFile = await fs.readFileSync(jsonFilePath, 'utf-8');
+  const jsonData = JSON.parse(jsonFile);
+  console.log(jsonData)
 
-const publish = async (jsonFilePath, schemaFilePath, topic, brokers) => {
-  // Load JSON data and Avro schema
-  const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
-  const schema = loadSchema(schemaFilePath);
+  let avroMessage;
+  if (schemaRegistry) {
+    const reg = new SchemaRegistry({ host: schemaRegistry });
+    const registryId = await reg.getRegistryId("receipt.created-value", "latest");
+    avroMessage = await reg.encode(registryId, await jsonData);
+  }
+  else {
+    const schema = loadSchema(schemaFilePath);
+    avroMessage = serializeToAvro(schema, {...jsonData});
+  }
 
-  // Serialize JSON data to Avro format
-  const avroMessage = serializeToAvro(schema, jsonData);
-
-  // Publish serialized Avro data to Kafka
   await publishToKafka(topic, avroMessage, brokers);
   console.log(`Message published to topic ${topic}`);
 };
 
-vorpal.command('publish <jsonFilePath> <schemaFilePath> <topic>', 'Publish JSON data to Kafka')
-  .option('-b, --broker', 'Set Kafka brokers, can be comma separated.')
+vorpal.command('publish <jsonFilePath> <topic>', 'Publish JSON data to Kafka')
+  .option('-b, --broker <broker>', 'Set Kafka brokers, can be comma separated.')
+  .option('-sr, --schemaRegistry <schemaRegistry>', 'Set Kafka schema registry, if set will use confluent-avro format.')
+  .option('-s, --schema <schema>', 'Specify schema file.')
   .action(async (args, callback) => {
-    await publish(args.jsonFilePath, args.schemaFilePath, args.topic, args.options.broker);
+    console.log(args);
+    if (!args.options.schema && !args.options.schemaRegistry) {
+      console.error('Please specify either schema file (-s flag) or schema registry (-sr flag).');
+      callback();
+      return;
+    }
+    await publish(args.jsonFilePath, args.options.schema, args.topic, args.options.broker, args.options.schemaRegistry);
     callback();
   });
 
-const command = process.argv.slice(2).join(' ');
 vorpal.find('exit').remove();
-vorpal.exec(command).then(() => process.exit(0)).catch(() => process.exit(1));
+//vorpal.parse(process.argv).exec(command).then(() => process.exit(0)).catch(() => process.exit(1));
+vorpal.parse(process.argv);
