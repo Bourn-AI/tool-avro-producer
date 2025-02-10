@@ -48,27 +48,30 @@ const publishToKafka = async (topic, message, brokers) => {
 const publish = async (jsonFilePath, schemaFilePath, topic, brokers, schemaRegistry) => {
   const jsonFile = await fs.readFileSync(jsonFilePath, 'utf-8');
   const jsonData = JSON.parse(jsonFile);
-  console.log(jsonData)
 
-  let avroMessage;
-  if (schemaRegistry) {
-    const reg = new SchemaRegistry({ host: schemaRegistry });
-    const registryId = await reg.getRegistryId(`${topic}-value`, "latest");
-    avroMessage = await reg.encode(registryId, await jsonData);
-  }
-  else {
-    const schema = loadSchema(schemaFilePath);
-    avroMessage = serializeToAvro(schema, {...jsonData});
-  }
+  if (!Array.isArray(jsonData)) jsonData = [jsonData];
 
-  await publishToKafka(topic, avroMessage, brokers);
-  console.log(`Message published to topic ${topic}`);
-};
+  while (jsonData.length > 0) {
+      let msg = jsonData.pop();
+      let avroMessage;
+      if (schemaRegistry) {
+        const reg = new SchemaRegistry({ host: schemaRegistry });
+        const registryId = await reg.getRegistryId(`${topic}-value`, "latest");
+        avroMessage = await reg.encode(registryId, msg);
+      }
+      else {
+        const schema = loadSchema(schemaFilePath);
+        avroMessage = serializeToAvro(schema, {...msg});
+      }
+      await publishToKafka(topic, avroMessage, brokers);
+      console.log(`Message published to topic ${topic}`);
+  }
+}
 
 vorpal.command('publish <jsonFilePath> <topic>', 'Publish JSON data to Kafka')
-  .option('-b, --broker <broker>', 'Set Kafka brokers, can be comma separated.')
-  .option('-sr, --schemaRegistry <schemaRegistry>', 'Set Kafka schema registry, if set will use confluent-avro format.')
-  .option('-s, --schema <schema>', 'Specify schema file.')
+  .option('-b, --broker [broker]', 'Set Kafka brokers, can be comma separated.')
+  .option('-sr, --schemaRegistry [schemaRegistry]', 'Set Kafka schema registry, if set will use confluent-avro format.')
+  .option('-s, --schema [schema]', 'Specify schema file.')
   .action(async (args, callback) => {
     console.log(args);
     if (!args.options.schema && !args.options.schemaRegistry) {

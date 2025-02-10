@@ -1,7 +1,9 @@
 {
-    "receiptId": "client_id",
-    "amount": "amount",
-    "vendorId": "vendor_id",
-    "customerId": "customer_id",
-    "reference": "reference"
-}
+	"clientId": "bourn",
+	"vendorId": "67976607c479e323c41f41ed",
+	"receiptId":"test1",
+    "reference":"flamingo",
+    "amount":"770.42",
+    "sendingAccountName":"Account_54",
+    "createdAt":"2025-01-02T00:00:00.000Z"
+}  

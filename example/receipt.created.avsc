@@ -4,7 +4,19 @@
   "namespace": "ai.bourn",
   "fields": [
     {
+      "name": "createdAt",
+      "type": "string"
+    },
+    {
+      "name": "clientId",
+      "type": "string"
+    },
+    {
       "name": "receiptId",
+      "type": "string"
+    },
+    {
+      "name": "sendingAccountName",
       "type": "string"
     },
     {
@@ -20,7 +32,10 @@
     },
     {
       "name": "customerId",
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ], "default": null
     },
     {
       "name": "vendorId",

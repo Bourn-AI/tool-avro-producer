@@ -1,0 +1,68 @@
+{
+  "fields": [
+    {
+      "name": "currency",
+      "type": "string"
+    },
+    {
+      "name": "clientId",
+      "type": "string"
+    },
+    {
+      "name": "vendorId",
+      "type": "string"
+    },
+    {
+      "name": "accountId",
+      "type": "string"
+    },
+    {
+      "name": "virtualAccountId",
+      "type": "string"
+    },
+    {
+      "name": "accountIdentifier",
+      "type": {
+        "fields": [
+          {
+            "default": null,
+            "name": "iban",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "default": null,
+            "name": "bban",
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        ],
+        "name": "AccountIdentifiers",
+        "type": "record"
+      }
+    },
+    {
+      "default": null,
+      "name": "externalIdentifier",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "ownerName",
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  ],
+  "name": "VirtualAccountCreated",
+  "namespace": "ai.bourn",
+  "type": "record"
+}

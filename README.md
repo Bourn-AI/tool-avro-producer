@@ -6,3 +6,6 @@
 * Download binaries from https://github.com/Bourn-AI/tool-avro-producer/releases or clone repo and run (requires node environment) with ```npm install && npm start``` 
 
 ![Demo](readme.gif)
+
+# Generator
+* To generate synthetic messages use npm run --silent gen-t (e.g. for generate transactions)

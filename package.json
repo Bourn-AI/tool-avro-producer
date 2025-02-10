@@ -6,14 +6,17 @@
   "scripts": {
     "start": "node src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "pkg . && zip releases/release-$npm_package_version.zip release/avro-*"
+    "package": "pkg . && zip releases/release-$npm_package_version.zip release/avro-*",
+    "gen-t": "node ./generator/transaction.settled.mjs"
   },
   "author": "paul-bournai",
   "license": "AGPL-3.0-only",
   "description": "",
   "dependencies": {
+    "@faker-js/faker": "^9.4.0",
     "@kafkajs/confluent-schema-registry": "^3.3.0",
     "avsc": "^5.7.7",
+    "csv-parser": "^3.2.0",
     "kafkajs": "^2.2.4",
     "vorpal": "^1.12.0"
   },

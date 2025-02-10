@@ -1,0 +1,212 @@
+{
+  "fields": [
+    {
+      "name": "balance",
+      "type": "double"
+    },
+    {
+      "name": "accountId",
+      "type": "string"
+    },
+    {
+      "name": "clientId",
+      "type": "string"
+    },
+    {
+      "name": "vendorId",
+      "type": "string"
+    },
+    {
+      "name": "transactionId",
+      "type": "string"
+    },
+    {
+      "name": "status",
+      "type": "string"
+    },
+    {
+      "name": "scheme",
+      "type": "string"
+    },
+    {
+      "name": "endToEndTransactionId",
+      "type": "string"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    },
+    {
+      "name": "timestampSettled",
+      "type": "string"
+    },
+    {
+      "name": "timestampCreated",
+      "type": "string"
+    },
+    {
+      "name": "currencyCode",
+      "type": "string"
+    },
+    {
+      "name": "debitCreditCode",
+      "type": "string"
+    },
+    {
+      "default": null,
+      "name": "reference",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "name": "isReturn",
+      "type": "boolean"
+    },
+    {
+      "name": "account",
+      "type": {
+        "fields": [
+          {
+            "default": null,
+            "name": "iban",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "default": null,
+            "name": "bban",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "default": null,
+            "name": "ownerName",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "default": null,
+            "name": "transactionOwnerName",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "default": null,
+            "name": "institutionName",
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        ],
+        "name": "AccountDetails",
+        "type": "record"
+      }
+    },
+    {
+      "name": "counterpartAccount",
+      "type": "AccountDetails"
+    },
+    {
+      "default": null,
+      "name": "actualEndToEndTransactionId",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "directDebitMandateId",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "transactionCode",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "serviceUserNumber",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "bacsTransactionId",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "bacsTransactionDescription",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "transactionType",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "transactionSource",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    {
+      "default": null,
+      "name": "supplementaryData",
+      "type": [
+        "null",
+        {
+          "items": {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "name": "value",
+                "type": "string"
+              }
+            ],
+            "name": "SupplementaryData",
+            "type": "record"
+          },
+          "type": "array"
+        }
+      ]
+    }
+  ],
+  "name": "TransactionSettled",
+  "namespace": "ai.bourn",
+  "type": "record"
+}
